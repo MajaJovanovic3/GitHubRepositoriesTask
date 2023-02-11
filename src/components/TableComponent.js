@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/RepositoriesPage.css';
+import '../styles/TableComponent.css';
 
 const TableComponent = ({ repositories }) => {
   const navigate = useNavigate();

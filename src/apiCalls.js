@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/core';
+import { findLastPageNumber } from './utils/helpers';
 
 const octokit = new Octokit({ auth: process.env.REACT_APP_GITHUB_TOKEN });
 
@@ -91,12 +92,18 @@ export const listOfContributorsNames = async (owner, repo) => {
   }
 };
 
-export const getRepositoriesData = async (q) => {
+export const getRepositoriesData = async (q, currentPage) => {
   try {
     const repositoriesApi = await octokit.request('GET /search/repositories', {
       q: q,
+      per_page: 5,
+      page: currentPage,
     });
-    const { data: { items = {} } = {} } = repositoriesApi || {};
+    const {
+      data: { items = {} },
+      headers: { link = {} } = {},
+    } = repositoriesApi || {};
+    const lastPageNumber = findLastPageNumber(link);
     let listOfRepositories = {};
     if (items.length > 0) {
       listOfRepositories = items.map(
@@ -109,17 +116,17 @@ export const getRepositoriesData = async (q) => {
         }) => ({ id, name, forks, stars, owner: { login, avatar_url } }),
       );
     }
-    return listOfRepositories || {};
+    return { listOfRepositories, lastPageNumber } || {};
   } catch (error) {
     return error;
   }
 };
 
-export const getRepositoriesFromApi = async (q) => {
+export const getRepositoriesFromApi = async (q, currentPage) => {
   try {
-    const repositoriesData = await getRepositoriesData(q);
+    const repoData = await getRepositoriesData(q, currentPage);
     const repositories = await Promise.all(
-      repositoriesData.map(async (repository) => {
+      repoData.listOfRepositories.map(async (repository) => {
         let ownerName = await findNameByLogin(repository.owner.login);
         ownerName = ownerName ?? repository.owner.login;
         return {
@@ -128,7 +135,7 @@ export const getRepositoriesFromApi = async (q) => {
         };
       }),
     );
-    return repositories || {};
+    return { repositories, lastPage: repoData.lastPageNumber } || {};
   } catch (error) {
     return error;
   }

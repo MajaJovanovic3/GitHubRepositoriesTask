@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { getRepositoriesFromApi } from '../apiCalls';
+import PaginationComponent from '../components/PaginationComponent';
 import TableComponent from '../components/TableComponent';
 import '../styles/RepositoriesPage.css';
 
 const RepositoriesPage = () => {
   const [q, setQ] = useState('');
   const [repositories, setRepositories] = useState({});
+  const [lastPage, setLastPage] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const getRepositories = async () => {
+  const getRepositories = async (q, currentPage) => {
     try {
-      let repositories = await getRepositoriesFromApi(q);
-      setRepositories(repositories);
+      let repositoriesFromApi = await getRepositoriesFromApi(q, currentPage);
+      setRepositories(repositoriesFromApi.repositories);
+      setLastPage(repositoriesFromApi.lastPage);
     } catch (error) {
       console.log(error);
       alert('Something went wrong!');
@@ -18,10 +22,8 @@ const RepositoriesPage = () => {
   };
 
   useEffect(() => {
-    if (q.length > 0) {
-      getRepositories();
-    }
-  }, [q]);
+    if (q.length > 0) getRepositories(q, currentPage);
+  }, [q, currentPage]);
 
   return (
     <>
@@ -36,8 +38,16 @@ const RepositoriesPage = () => {
           </button>
         </div>
       </div>
-      {repositories.length > 0 ? (
-        <TableComponent repositories={repositories} />
+      {repositories?.length > 0 ? (
+        <div>
+          <TableComponent repositories={repositories} />
+          <PaginationComponent
+            lastPage={Number(lastPage)}
+            currPage={currentPage}
+            setCurrPage={setCurrentPage}
+            q={q}
+          />
+        </div>
       ) : (
         <></>
       )}
