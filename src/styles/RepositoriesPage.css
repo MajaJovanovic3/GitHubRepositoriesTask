@@ -1,13 +1,16 @@
 .tab {
-  width: 80%;
-  height: 100px;
-  position: relative;
-  margin: 20px auto;
+  width: 100%;
+  height: 70px;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #ccc;
+  padding-block: 10px;
 }
 
 .btn-box {
+  width: 80%;
+  position: relative;
+  margin: auto;
   display: flex;
-  border-bottom: 1px solid #ccc;
 }
 
 .btn-box button {
@@ -15,8 +18,8 @@
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
   margin-right: 50px;
+  padding-top: 30px;
   font-size: 20px;
   font-weight: bold;
 }
@@ -29,6 +32,37 @@
   color: #009889;
 }
 
-.btn-box button .fa:active {
-  background-color: #009889;
+.active {
+  color: #009889;
+}
+
+.loader {
+  width: 80%;
+  margin: 20px auto;
+  border: 8px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 8px solid #009889;
+  border-bottom: 8px solid #009889;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

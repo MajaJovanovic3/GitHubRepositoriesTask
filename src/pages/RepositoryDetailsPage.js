@@ -14,8 +14,10 @@ const RepositoryDetailsPage = () => {
   const { state } = useLocation();
 
   const [detailsRepo, setDetailsRepo] = useState({});
+  const [spinnerActive, setSpinnerActive] = useState(true);
 
   useEffect(() => {
+    setSpinnerActive(true);
     const getData = async () => {
       try {
         const data = await detailsOfRepo(state.owner, state.repo);
@@ -38,6 +40,7 @@ const RepositoryDetailsPage = () => {
           languages,
           topics,
         });
+        setSpinnerActive(false);
       } catch (error) {
         console.log(error);
       }
@@ -53,7 +56,11 @@ const RepositoryDetailsPage = () => {
           </h2>
         </div>
       </div>
-      <CardsComponent props={detailsRepo} />
+      {spinnerActive ? (
+        <div className='loader' />
+      ) : (
+        <CardsComponent props={detailsRepo} />
+      )}
     </>
   );
 };

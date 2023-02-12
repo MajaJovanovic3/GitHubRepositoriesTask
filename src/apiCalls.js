@@ -92,13 +92,16 @@ export const listOfContributorsNames = async (owner, repo) => {
   }
 };
 
-export const getRepositoriesData = async (q, currentPage) => {
+export const getRepositoriesData = async (q, currentPage, sort) => {
   try {
     const repositoriesApi = await octokit.request('GET /search/repositories', {
       q: q,
       per_page: 5,
       page: currentPage,
+      sort: sort.params,
+      order: sort.order,
     });
+    console.log(repositoriesApi);
     const {
       data: { items = {} },
       headers: { link = {} } = {},
@@ -122,9 +125,9 @@ export const getRepositoriesData = async (q, currentPage) => {
   }
 };
 
-export const getRepositoriesFromApi = async (q, currentPage) => {
+export const getRepositoriesFromApi = async (q, currentPage, sort) => {
   try {
-    const repoData = await getRepositoriesData(q, currentPage);
+    const repoData = await getRepositoriesData(q, currentPage, sort);
     const repositories = await Promise.all(
       repoData.listOfRepositories.map(async (repository) => {
         let ownerName = await findNameByLogin(repository.owner.login);

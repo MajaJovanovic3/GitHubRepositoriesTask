@@ -2,15 +2,22 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/TableComponent.css';
 
-const TableComponent = ({ repositories }) => {
+const TableComponent = ({ repositories, sort, setSort,isDescendingOrder, setIsDescendingOrder, setCurrentPage  }) => {
   const navigate = useNavigate();
-  const [activeRow, setActiveRow] = useState(false);
+
+  const setSortColumn = (column) => {
+    setIsDescendingOrder(!isDescendingOrder)
+    setCurrentPage(1)
+    setSort({params:column, order: !isDescendingOrder ? 'desc' : 'asc'})
+    } 
+ 
   const handleClick = (e, repository) => {
     navigate('/repository-details', {
       state: {
         owner: repository.owner.login,
         ownerName: repository.ownerName,
         repo: repository.name,
+        sort:sort
       },
     });
   };
@@ -21,8 +28,16 @@ const TableComponent = ({ repositories }) => {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Stars</th>
-              <th>Forks</th>
+              <th onClick={() => setSortColumn('stars')}>
+                Stars
+                {sort.params=='stars' && sort.order=='desc' ?  '↓' : ''}
+                {sort.params=='stars' && sort.order=='asc' ?  '↑' : ''}
+              </th>
+              <th onClick={() => setSortColumn('forks')}>
+                Forks
+                {sort.params=='forks' && sort.order=='desc' ?  '↓' : ''}
+                {sort.params=='forks' && sort.order=='asc' ?  '↑' : ''}
+              </th>
               <th>Owner</th>
               <th>Avatar</th>
             </tr>
@@ -32,7 +47,6 @@ const TableComponent = ({ repositories }) => {
               <tr
                 key={repository.id}
                 onClick={(e) => handleClick(e, repository)}
-                className={activeRow ? 'active-row' : ''}
               >
                 <td>{repository.name}</td>
                 <td>{repository.stars}</td>
