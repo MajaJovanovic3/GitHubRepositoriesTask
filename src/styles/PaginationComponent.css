@@ -46,9 +46,10 @@
   color: #fff;
 }
 
-.active {
-  background: #009889;
+.activeNum {
+  background-color: #009889;
   color: #fff;
+  text-decoration: none;
 }
 a:link {
   text-decoration: none;

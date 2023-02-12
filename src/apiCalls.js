@@ -96,12 +96,11 @@ export const getRepositoriesData = async (q, currentPage, sort) => {
   try {
     const repositoriesApi = await octokit.request('GET /search/repositories', {
       q: q,
-      per_page: 5,
+      per_page: 7,
       page: currentPage,
       sort: sort.params,
       order: sort.order,
     });
-    console.log(repositoriesApi);
     const {
       data: { items = {} },
       headers: { link = {} } = {},

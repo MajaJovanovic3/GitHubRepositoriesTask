@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/TableComponent.css';
 
-const TableComponent = ({ repositories, sort, setSort,isDescendingOrder, setIsDescendingOrder, setCurrentPage  }) => {
+const TableComponent = ({
+  repositories,
+  sort,
+  setSort,
+  isDescendingOrder,
+  setIsDescendingOrder,
+  setCurrentPage,
+}) => {
   const navigate = useNavigate();
 
   const setSortColumn = (column) => {
-    setIsDescendingOrder(!isDescendingOrder)
-    setCurrentPage(1)
-    setSort({params:column, order: !isDescendingOrder ? 'desc' : 'asc'})
-    } 
- 
+    setIsDescendingOrder(!isDescendingOrder);
+    setCurrentPage(1);
+    setSort({ params: column, order: !isDescendingOrder ? 'desc' : 'asc' });
+  };
+
   const handleClick = (e, repository) => {
     navigate('/repository-details', {
       state: {
         owner: repository.owner.login,
         ownerName: repository.ownerName,
         repo: repository.name,
-        sort:sort
       },
     });
   };
@@ -30,13 +36,13 @@ const TableComponent = ({ repositories, sort, setSort,isDescendingOrder, setIsDe
               <th>Name</th>
               <th onClick={() => setSortColumn('stars')}>
                 Stars
-                {sort.params=='stars' && sort.order=='desc' ?  '↓' : ''}
-                {sort.params=='stars' && sort.order=='asc' ?  '↑' : ''}
+                {sort.params == 'stars' && sort.order == 'desc' ? '↓' : ''}
+                {sort.params == 'stars' && sort.order == 'asc' ? '↑' : ''}
               </th>
               <th onClick={() => setSortColumn('forks')}>
                 Forks
-                {sort.params=='forks' && sort.order=='desc' ?  '↓' : ''}
-                {sort.params=='forks' && sort.order=='asc' ?  '↑' : ''}
+                {sort.params == 'forks' && sort.order == 'desc' ? '↓' : ''}
+                {sort.params == 'forks' && sort.order == 'asc' ? '↑' : ''}
               </th>
               <th>Owner</th>
               <th>Avatar</th>

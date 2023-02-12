@@ -36,7 +36,7 @@ export const numberHTML = (number, currPage, setCurrPage) => {
     <>
       <div
         key={number}
-        className={number === currPage ? 'round-effect active' : 'round-effect'}
+        className={number === currPage ? 'round-effect activeNum' : 'round-effect'}
         onClick={() => {
           setCurrPage(number);
         }}

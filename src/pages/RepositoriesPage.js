@@ -13,6 +13,10 @@ const RepositoriesPage = () => {
   const [spinnerActive, setSpinnerActive] = useState(false);
   const [isDescendingOrder, setIsDescendingOrder] = useState(true);
 
+  const REACT_Q = 'react in:topics is:public';
+  const VUE_Q = 'vue in:topics is:public';
+  const ANGULAR_Q = 'angular in:topics is:public';
+
   const getRepositories = async (q, currentPage, sort) => {
     try {
       let repositoriesFromApi = await getRepositoriesFromApi(
@@ -40,11 +44,23 @@ const RepositoriesPage = () => {
     <>
       <div className='tab'>
         <div className='btn-box'>
-          <button onClick={() => setQ('react in:topics is:public')}>
+          <button
+            className={q === REACT_Q ? 'active' : ''}
+            onClick={() => setQ(REACT_Q)}
+          >
             React
           </button>
-          <button onClick={() => setQ('vue in:topics is:public')}> Vue</button>
-          <button onClick={() => setQ('angular in:topics is:public')}>
+          <button
+            className={q === VUE_Q ? 'active' : ''}
+            onClick={() => setQ(VUE_Q)}
+          >
+            {' '}
+            Vue
+          </button>
+          <button
+            className={q === ANGULAR_Q ? 'active' : ''}
+            onClick={() => setQ(ANGULAR_Q)}
+          >
             Angular
           </button>
         </div>
