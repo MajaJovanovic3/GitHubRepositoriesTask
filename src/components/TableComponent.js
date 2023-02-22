@@ -1,21 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { changeCurrPage, sortBy, toggleSwitch } from '../pages/repositorySlice';
 import '../styles/TableComponent.css';
 
-const TableComponent = ({
-  repositories,
-  sort,
-  setSort,
-  isDescendingOrder,
-  setIsDescendingOrder,
-  setCurrentPage,
-}) => {
+const TableComponent = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { sort, repositories } = useSelector(
+    (state) => ({
+      sort: state.repository.sort,
+      repositories: state.repository.repositories,
+    }),
+    shallowEqual,
+  );
+
   const setSortColumn = (column) => {
-    setIsDescendingOrder(!isDescendingOrder);
-    setCurrentPage(1);
-    setSort({ params: column, order: !isDescendingOrder ? 'desc' : 'asc' });
+    dispatch(toggleSwitch());
+    dispatch(sortBy(column));
+    dispatch(changeCurrPage(1));
   };
 
   const handleClick = (e, repository) => {
@@ -27,6 +31,7 @@ const TableComponent = ({
       },
     });
   };
+
   return (
     <>
       <div className='div-table'>
@@ -36,13 +41,13 @@ const TableComponent = ({
               <th>Name</th>
               <th onClick={() => setSortColumn('stars')}>
                 Stars
-                {sort.params == 'stars' && sort.order == 'desc' ? '↓' : ''}
-                {sort.params == 'stars' && sort.order == 'asc' ? '↑' : ''}
+                {sort?.params === 'stars' && sort.order === 'desc' ? '↓' : ''}
+                {sort?.params === 'stars' && sort.order === 'asc' ? '↑' : ''}
               </th>
               <th onClick={() => setSortColumn('forks')}>
                 Forks
-                {sort.params == 'forks' && sort.order == 'desc' ? '↓' : ''}
-                {sort.params == 'forks' && sort.order == 'asc' ? '↑' : ''}
+                {sort?.params === 'forks' && sort.order === 'desc' ? '↓' : ''}
+                {sort?.params === 'forks' && sort.order === 'asc' ? '↑' : ''}
               </th>
               <th>Owner</th>
               <th>Avatar</th>
