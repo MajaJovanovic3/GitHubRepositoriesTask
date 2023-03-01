@@ -1,11 +1,24 @@
 import React from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { changeCurrPage } from '../pages/repositorySlice';
 import { numberHTML } from '../utils/helpers';
 import '../styles/PaginationComponent.css';
 
-const PaginationComponent = ({ lastPage, currPage, setCurrPage, q }) => {
+const PaginationComponent = () => {
+  const dispatch = useDispatch();
+
+  const { currPage, lastPage } = useSelector(
+    (state) => state.repository,
+    shallowEqual,
+  );
+
   let items = [];
   let leftSide = currPage - 3 <= 0 ? 1 : currPage - 3;
   let rightSide = currPage + 3 >= lastPage ? lastPage : currPage + 3;
+
+  const setCurrPage = (currPage) => {
+    dispatch(changeCurrPage(currPage));
+  };
 
   for (let i = leftSide; i <= rightSide; i++) {
     let number = numberHTML(i, currPage, setCurrPage);
